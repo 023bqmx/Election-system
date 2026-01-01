@@ -23,6 +23,45 @@ body {
     flex-direction: column;
 }
 
+/* --- Splash Screen (หน้าโหลด) --- */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* อยู่บนสุดเสมอ */
+    transition: opacity 1s ease, visibility 1s; /* เฟดออก 1 วินาที */
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-logo {
+    max-width: 80%;
+    max-height: 80%;
+    width: 250px; /* ขนาดโลโก้ปรับได้ตามใจชอบ */
+    animation: pulse 2s infinite; /* เอฟเฟกต์หายใจเบาๆ */
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* --- Layout --- */
+.main-content {
+    flex: 1; /* ดัน Footer ลงล่าง */
+}
+
 /* Header */
 header {
     background: white;
@@ -37,72 +76,73 @@ header {
 h1 { margin: 0; color: var(--primary); font-size: 1.8rem; }
 p { margin: 5px 0 0; color: #7f8c8d; font-size: 0.9rem; }
 
-/* Main Container */
+/* Container */
 .container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    flex: 1;
     width: 100%;
 }
 
-/* Voting Grid */
+/* --- Party Cards (แบบรูปภาพ) --- */
 .party-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; /* แบ่งครึ่ง ซ้าย-ขวา */
     gap: 15px;
     margin-bottom: 30px;
 }
 
 .party-card {
     background: white;
-    border-radius: 15px;
-    padding: 15px;
-    text-align: center;
+    border-radius: 12px;
+    overflow: hidden; /* ตัดขอบรูปที่เกิน */
     box-shadow: var(--shadow);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-    overflow: hidden;
-    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+    border: 3px solid transparent;
+    display: flex;
+    flex-direction: column;
 }
 
-.party-card:active { transform: scale(0.95); }
+.party-card:active { transform: scale(0.96); }
+
 .party-card.selected {
     border-color: var(--accent);
     background-color: #f0fff4;
 }
 
+/* การจัดการรูปภาพไม่ให้บีบ */
 .party-img {
-    width: 80px;
-    height: 80px;
-    background-color: #ddd;
-    border-radius: 50%;
-    margin: 0 auto 10px;
-    object-fit: cover;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    font-size: 2rem;
-    color: white;
+    width: 100%;
+    height: 180px; /* กำหนดความสูงให้เท่ากันทุกรูป */
+    object-fit: cover; /* **สำคัญ** ทำให้รูปเต็มกรอบโดยไม่บีบสัดส่วน */
+    background-color: #eee;
 }
 
-.party-name { font-weight: 600; font-size: 1rem; margin-bottom: 5px; }
+.party-info {
+    padding: 10px;
+    text-align: center;
+}
 
-/* Checkmark Animation */
+.party-name { font-weight: 600; font-size: 1rem; color: var(--dark); }
+.party-number { font-size: 0.8rem; color: #888; }
+
+/* Checkmark */
 .checkmark {
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     background: var(--accent);
     border-radius: 50%;
     display: none;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 10;
     animation: popIn 0.3s ease;
 }
 
@@ -127,28 +167,56 @@ p { margin: 5px 0 0; color: #7f8c8d; font-size: 0.9rem; }
     font-weight: 600;
     cursor: pointer;
     transition: background 0.3s;
-    margin-bottom: 50px;
+    margin-bottom: 80px;
 }
 .vote-no-btn:active { transform: scale(0.98); }
 
-/* Admin Button (Bottom Right) */
+/* Footer Credit */
+.site-footer {
+    text-align: center;
+    padding: 20px;
+    
+    /* แก้ไขจุดที่ 1: เพิ่ม padding-bottom ให้เยอะขึ้น (เช่น 80px) 
+       เพื่อให้ข้อความลอยสูงหนีปุ่มเฟือง */
+    padding-bottom: 20px; 
+    
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #fff;
+    color: #888;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+    
+    /* Responsive: ปรับขนาดตัวอักษรให้อ่านง่ายบนมือถือ และเว้นบรรทัด */
+    font-size: 0.8rem; 
+    line-height: 1.6; 
+}
+
+/* Admin Elements & Modals (เหมือนเดิม) */
 .admin-trigger {
     position: fixed;
-    bottom: 20px;
+    bottom: 90px; /* <--- แก้ตรงนี้ครับ (จากเดิม 20px) ดันปุ่มขึ้นไปให้พ้นแถบเครดิต */
     right: 20px;
-    background: rgba(255,255,255,0.8);
-    width: 40px;
-    height: 40px;
+    
+    /* โค้ดส่วนอื่นๆ คงเดิมไว้ */
+    background: rgba(255,255,255,0.9);
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-size: 1.4rem;
+    z-index: 1000; 
+    transition: transform 0.2s;
 }
 
-/* Modals (Popup) */
+.admin-trigger:active {
+    transform: scale(0.9); /* กดแล้วยุบลงนิดนึง ให้ดูมีมิติ */
+}
+
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -161,12 +229,7 @@ p { margin: 5px 0 0; color: #7f8c8d; font-size: 0.9rem; }
     opacity: 0;
     transition: opacity 0.3s;
 }
-
-.modal-overlay.active {
-    display: flex;
-    opacity: 1;
-}
-
+.modal-overlay.active { display: flex; opacity: 1; }
 .modal-box {
     background: white;
     width: 90%;
@@ -174,74 +237,19 @@ p { margin: 5px 0 0; color: #7f8c8d; font-size: 0.9rem; }
     padding: 30px;
     border-radius: 20px;
     text-align: center;
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
-
-.modal-overlay.active .modal-box { transform: translateY(0); }
-
 .modal-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
 .modal-desc { color: #666; margin-bottom: 25px; }
-
 .btn-group { display: flex; gap: 10px; justify-content: center; }
-
-.btn {
-    padding: 12px 25px;
-    border-radius: 10px;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 1rem;
-    flex: 1;
-}
+.btn { padding: 12px 25px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; flex: 1; }
 .btn-confirm { background: var(--primary); color: white; }
 .btn-cancel { background: #e0e0e0; color: #333; }
 .btn-danger { background: var(--danger); color: white; }
 
-/* Admin Dashboard */
-#adminPanel {
-    display: none; /* Hidden by default */
-    padding: 20px;
-    background: white;
-    min-height: 100vh;
-}
-
-.chart-container {
-    margin: 20px 0;
-    padding: 20px;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-}
-
-.history-list {
-    list-style: none;
-    padding: 0;
-}
-.history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-.device-badge {
-    background: #eee;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: #555;
-}
-
-/* Input for Admin */
-.pin-input {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.5rem;
-    text-align: center;
-    letter-spacing: 5px;
-    border: 2px solid #eee;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
+#adminPanel { display: none; padding: 20px; background: white; min-height: 100vh; }
+.chart-container { margin: 20px 0; padding: 20px; background: #fff; border-radius: 15px; box-shadow: var(--shadow); }
+.history-list { list-style: none; padding: 0; }
+.history-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
+.device-badge { background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: #555; }
+.pin-input { width: 100%; padding: 15px; font-size: 1.5rem; text-align: center; letter-spacing: 5px; border: 2px solid #eee; border-radius: 10px; margin-bottom: 20px; }

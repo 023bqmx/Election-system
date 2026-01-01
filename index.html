@@ -6,14 +6,16 @@
     <title>E-Voting System</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="userView">
+    <div id="splash-screen">
+        <img src="logo.jpg" alt="แท่งลำมังกร" class="splash-logo">
+    </div>
+
+    <div id="userView" class="main-content">
         <header>
             <h1>E-Voting</h1>
             <p>กรุณาเลือกผู้สมัครที่ท่านต้องการ</p>
@@ -23,30 +25,38 @@
             <div class="party-grid">
                 <div class="party-card" onclick="selectParty(1)">
                     <div class="checkmark">✓</div>
-                    <div class="party-img" style="background:#FF6B6B">1</div>
-                    <div class="party-name">พรรคที่ 1</div>
-                    <div style="font-size:0.8rem; color:#888;">หมายเลข 1</div>
+                    <img src="bom.jpg" class="party-img" alt="พรรค 1">
+                    <div class="party-info">
+                        <div class="party-name">พรรคที่ 1</div>
+                        <div class="party-number">หมายเลข 1</div>
+                    </div>
                 </div>
 
                 <div class="party-card" onclick="selectParty(2)">
                     <div class="checkmark">✓</div>
-                    <div class="party-img" style="background:#4ECDC4">2</div>
-                    <div class="party-name">พรรคที่ 2</div>
-                    <div style="font-size:0.8rem; color:#888;">หมายเลข 2</div>
+                    <img src="ลุง.jpg" class="party-img" alt="พรรค 2">
+                    <div class="party-info">
+                        <div class="party-name">พรรคที่ 2</div>
+                        <div class="party-number">หมายเลข 2</div>
+                    </div>
                 </div>
 
                 <div class="party-card" onclick="selectParty(3)">
                     <div class="checkmark">✓</div>
-                    <div class="party-img" style="background:#FFE66D; color:#333">3</div>
-                    <div class="party-name">พรรคที่ 3</div>
-                    <div style="font-size:0.8rem; color:#888;">หมายเลข 3</div>
+                    <img src="แตงโม.jpg" class="party-img" alt="พรรค 3">
+                    <div class="party-info">
+                        <div class="party-name">พรรคที่ 3</div>
+                        <div class="party-number">หมายเลข 3</div>
+                    </div>
                 </div>
 
                 <div class="party-card" onclick="selectParty(4)">
                     <div class="checkmark">✓</div>
-                    <div class="party-img" style="background:#1A535C">4</div>
-                    <div class="party-name">พรรคที่ 4</div>
-                    <div style="font-size:0.8rem; color:#888;">หมายเลข 4</div>
+                    <img src="พี่แปด.jpg" class="party-img" alt="พรรค 4">
+                    <div class="party-info">
+                        <div class="party-name">พรรคที่ 4</div>
+                        <div class="party-number">หมายเลข 4</div>
+                    </div>
                 </div>
             </div>
 
@@ -58,7 +68,7 @@
         <div class="admin-trigger" onclick="openAdminLogin()">⚙️</div>
     </div>
 
-    <div id="adminPanel">
+    <div id="adminPanel" class="main-content">
         <header style="display:flex; justify-content:space-between; align-items:center;">
             <h1>Admin Dashboard</h1>
             <button class="btn btn-cancel" style="flex:none;" onclick="logoutAdmin()">ออก</button>
@@ -77,9 +87,8 @@
 
             <div class="chart-container">
                 <h3>ประวัติการลงคะแนน</h3>
-                <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">กดปุ่มลบ เพื่อรีเซ็ตสิทธิ์ของเครื่องนั้นๆ</p>
-                <ul class="history-list" id="voteHistoryList">
-                    </ul>
+                <p style="font-size:0.8rem; color:#666; margin-bottom:10px;">รายการล่าสุดอยู่ด้านบน</p>
+                <ul class="history-list" id="voteHistoryList"></ul>
             </div>
             
             <button class="btn btn-danger" style="width:100%" onclick="nukeAllData()">ล้างข้อมูลการเลือกตั้งทั้งหมด</button>
@@ -118,15 +127,15 @@
         </div>
     </div>
 
+    <footer class="site-footer">
+        Made by กุนเชียง & เครือข่ายโรลเพลย์ ร้อยเรียงหมื่นอักษร (เเท่งลำมังกร)
+    </footer>
+
     <script type="module">
-        // เราจะเขียน Logic ใน script.js แต่ต้อง Import Module แบบนี้
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push, onValue, remove, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-        // ทำให้ฟังก์ชัน Firebase ใช้ได้ทั่วทั้งโปรเจกต์ (ส่งไปให้ script.js ใช้)
         window.firebaseModules = { initializeApp, getDatabase, ref, push, onValue, remove, set };
     </script>
-
     <script type="module" src="script.js"></script>
 </body>
 </html>
